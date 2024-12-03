@@ -1,4 +1,6 @@
 import express from 'express'
 const app = express()
 
-app.listen()
+app.listen(8000, () => {
+    console.log("App running on port 8000")
+})
