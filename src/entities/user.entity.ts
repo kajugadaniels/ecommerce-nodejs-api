@@ -35,6 +35,9 @@ export class User {
     })
     accountType!: AccountType;
 
+    @Column()
+    password!: string;
+
     @Column({ default: false })
     verified!: boolean;
 
