@@ -1,13 +1,18 @@
-import { BaseEntity, Column, Entity, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm'
-
-@Entity('users')
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 export enum AccountType {
     USER = 'User',
     ADMIN = 'Admin',
 }
 
-export class User extends BaseEntity {
+@Entity()
+export class User {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
