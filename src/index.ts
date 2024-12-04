@@ -7,6 +7,7 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(express.json());
 
+app.use("/api/auth", user_route);
 app.use("/api/users", user_route);
 
 app.listen(8000, () => {
