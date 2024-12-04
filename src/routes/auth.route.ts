@@ -1,6 +1,8 @@
-import express from "express";
-import { login, register } from "../controllers/auth.controller";
-export const user_route = express.Router();
+import express from 'express';
+import { login, register } from '../controllers/auth.controller';
+import { loginValidation, registerValidation } from '../validations/auth.validation';
 
-user_route.post("/login", login);
-user_route.post("/register", register);
+export const auth_route = express.Router();
+
+auth_route.post('/register', registerValidation, register);
+auth_route.post('/login', loginValidation, login);
