@@ -1,5 +1,6 @@
 import express from 'express'
 import { user_route } from './routes/user.route'
+import './db/db'
 const app = express()
 
 app.use("/api/users", user_route)
