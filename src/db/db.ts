@@ -10,7 +10,7 @@ export const db = createConnection({
     database: 'enso',
     entities: [User],
     synchronize: true,
-    logging: true,
+    // logging: true,
 })
   .then(() => console.log("Database connected successfully"))
   .catch(err => console.error("Database connection failed", err));
