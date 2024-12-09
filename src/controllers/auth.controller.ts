@@ -23,8 +23,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         return;
     }
     try {
-        const user = await loginUser(req);
-        res.json({ message: 'Login successful', user });
+        const { user, token } = await loginUser(req);
+        res.json({ message: 'Login successful', user, token });
     } catch (e: any) {
         res.status(401).json({ message: e.message });
     }
