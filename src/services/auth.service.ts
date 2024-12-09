@@ -4,14 +4,15 @@ import { User } from '../entities/user.entity';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { LoginRequest, RegisterRequest } from '../types/auth.type';
 
 dotenv.config(); // Load environment variables
 
-const JWT_SECRET = process.env.JWT_SECRET || 'abcdefgh1234567890';
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
 
 export const registerUser = async (req: Request): Promise<User> => {
-    const { firstName, lastName, email, phoneNumber, password } = req.body;
+    const { firstName, lastName, email, phoneNumber, password } = req.body as RegisterRequest;
     const userRepository = getRepository(User);
     const existingUser = await userRepository.findOne({ where: [{ email }, { phoneNumber }] });
     if (existingUser) {
@@ -24,13 +25,14 @@ export const registerUser = async (req: Request): Promise<User> => {
         email,
         phoneNumber,
         password: hashedPassword,
+        dob: '1990-01-01', // Default value or adjust as needed
     });
     await userRepository.save(newUser);
     return newUser;
 };
 
 export const loginUser = async (req: Request): Promise<{ user: User; token: string }> => {
-    const { login, password } = req.body;
+    const { login, password } = req.body as LoginRequest;
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({
         where: [{ email: login }, { phoneNumber: login }]
