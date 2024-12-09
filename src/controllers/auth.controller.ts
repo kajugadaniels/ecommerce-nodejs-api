@@ -24,8 +24,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
     try {
         const { user, token } = await loginUser(req);
+        console.log(`Generated JWT: ${token}`); // For debugging
         res.json({ message: 'Login successful', user, token });
     } catch (e: any) {
         res.status(401).json({ message: e.message });
     }
+};
+
+export const logout = async (req: Request, res: Response): Promise<void> => {
+    // Since JWT is stateless, simply respond with success.
+    // The client should delete the token.
+    res.json({ message: 'Logout successful' });
 };
