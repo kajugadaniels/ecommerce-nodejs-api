@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { ErrorRequestHandler } from 'express';
 import { user_route } from './routes/user.route';
 import { auth_route } from './routes/auth.route';
 import './db/db';
@@ -16,19 +16,24 @@ app.use("/api/users", user_route);
 app.use("/api/auth", auth_route);
 
 // JSON parsing error handler
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+const jsonErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+    if (err instanceof SyntaxError && (err as any).status === 400 && 'body' in err) {
         console.error('Bad JSON');
-        return res.status(400).json({ message: 'Invalid JSON format' });
+        res.status(400).json({ message: 'Invalid JSON format' });
+    } else {
+        next();
     }
-    next();
-});
+};
+
+app.use(jsonErrorHandler);
 
 // General error-handling middleware
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+const generalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Internal Server Error' });
-});
+};
+
+app.use(generalErrorHandler);
 
 app.listen(8000, () => {
     console.log("App running on port 8000");
