@@ -8,7 +8,7 @@ import { LoginRequest, RegisterRequest } from '../types/auth.type';
 
 dotenv.config(); // Load environment variables
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET || 'abcdefgh1234567890';
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
 
 export const registerUser = async (req: Request): Promise<User> => {
