@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config(); // Load environment variables
 
 const JWT_SECRET = process.env.JWT_SECRET || 'abcdefgh1234567890';
 
@@ -18,6 +18,7 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
 
     if (authHeader && authHeader.startsWith('Bearer ')) {
         const token = authHeader.split(' ')[1];
+        console.log(`Received JWT: ${token}`); 
 
         jwt.verify(token, JWT_SECRET, (err, decoded) => {
             if (err) {
