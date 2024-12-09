@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { LoginRequest, RegisterRequest } from '../types/auth.type';
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'abcdefgh1234567890';
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
@@ -25,7 +25,6 @@ export const registerUser = async (req: Request): Promise<User> => {
         email,
         phoneNumber,
         password: hashedPassword,
-        dob: '1990-01-01', // Default value or adjust as needed
     });
     await userRepository.save(newUser);
     return newUser;
