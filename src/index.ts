@@ -3,6 +3,7 @@ import { user_route } from './routes/user.route';
 import { auth_route } from './routes/auth.route';
 import './db/db';
 import dotenv from 'dotenv';
+import morgan from 'morgan';
 
 dotenv.config();
 
@@ -10,6 +11,9 @@ const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Logging middleware
+app.use(morgan('dev'));
 
 // Define routes
 app.use("/api/users", user_route);
