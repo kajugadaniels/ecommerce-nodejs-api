@@ -4,6 +4,7 @@ import { auth_route } from './routes/auth.route';
 import './db/db';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import cors from 'cors'; // Import CORS
 
 dotenv.config();
 
@@ -11,6 +12,12 @@ const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// CORS Middleware
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow your frontend's origin
+  credentials: true, // Allow credentials if needed
+}));
 
 // Logging middleware
 app.use(morgan('dev'));
