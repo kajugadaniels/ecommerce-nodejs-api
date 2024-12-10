@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { getRepository } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { User, AccountType } from '../entities/user.entity';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -58,9 +58,9 @@ export const loginUser = async (req: Request): Promise<{ user: User; token: stri
         throw new Error('Invalid credentials');
     }
 
-    // Generate JWT
+    // Generate JWT including AccountType
     const token = jwt.sign(
-        { userId: user.id, email: user.email },
+        { userId: user.id, email: user.email, accountType: user.accountType },
         JWT_SECRET,
         { expiresIn: JWT_EXPIRATION }
     );
