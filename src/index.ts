@@ -7,7 +7,7 @@ import './db/db';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
-import { apiLimiter } from './middleware/rateLimiter';
+import { apiLimiter } from './middleware/rateLimiter.middleware';
 
 dotenv.config();
 
@@ -31,8 +31,8 @@ app.use(morgan('dev'));
 // Define routes
 app.use("/api/users", user_route);
 app.use("/api/auth", auth_route);
-app.use("/api", category_route);
-app.use("/api", size_route);
+app.use("/api/categories", category_route);
+app.use("/api/sizes", size_route);
 
 // JSON parsing error handler
 const jsonErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
