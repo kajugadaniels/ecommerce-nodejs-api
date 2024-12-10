@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from './auth.middleware';
-import { AccountType } from '../entities/user.entity'; // Import AccountType
+import { AccountType } from '../entities/user.entity';
 
 export const isAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
     if (req.user && req.user.accountType === AccountType.ADMIN) {
