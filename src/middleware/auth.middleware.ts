@@ -1,16 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { AccountType } from '../entities/user.entity';
 
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'abcdefgh1234567890';
 
+// Define the shape of the decoded JWT payload
+export interface DecodedToken {
+    userId: string;
+    email: string;
+    accountType: AccountType;
+}
+
+// Extend the Request interface to include the user property
 export interface AuthRequest extends Request {
-    user?: {
-        userId: string;
-        email: string;
-    };
+    user?: DecodedToken;
 }
 
 export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -18,7 +24,7 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
 
     if (authHeader && authHeader.startsWith('Bearer ')) {
         const token = authHeader.split(' ')[1];
-        console.log(`Received JWT: ${token}`);
+        console.log(`Received JWT: ${token}`); 
 
         jwt.verify(token, JWT_SECRET, (err, decoded) => {
             if (err) {
@@ -27,7 +33,7 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
             }
 
             // Attach user information to the request object
-            req.user = decoded as { userId: string; email: string };
+            req.user = decoded as DecodedToken;
             next();
         });
     } else {
