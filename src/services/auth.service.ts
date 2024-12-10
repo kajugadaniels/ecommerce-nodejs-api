@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { getRepository } from 'typeorm';
-import { User, AccountType } from '../entities/user.entity';
+import { User, AccountType } from '../entities/user.entity'; // Import AccountType
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -32,6 +32,7 @@ export const registerUser = async (req: Request): Promise<User> => {
         phoneNumber,
         password: hashedPassword,
         dob: '1990-01-01',
+        accountType: AccountType.USER,
     });
 
     // Save the user to the database
