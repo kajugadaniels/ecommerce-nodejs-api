@@ -6,7 +6,7 @@ export const createCategory = async (data: CreateCategoryRequest): Promise<Categ
     const categoryRepository = getRepository(Category);
 
     // Check if category with the same name already exists
-    const existingCategory = await categoryRepository.findOne({ where: { name: data.name } });
+    const existingCategory = await categoryRepository.findOneBy({ name: data.name });
     if (existingCategory) {
         throw new Error('Category with this name already exists');
     }
@@ -24,7 +24,7 @@ export const getAllCategories = async (): Promise<Category[]> => {
 
 export const getCategoryById = async (id: string): Promise<Category> => {
     const categoryRepository = getRepository(Category);
-    const category = await categoryRepository.findOne(id);
+    const category = await categoryRepository.findOneBy({ id });
     if (!category) {
         throw new Error('Category not found');
     }
@@ -33,14 +33,14 @@ export const getCategoryById = async (id: string): Promise<Category> => {
 
 export const updateCategory = async (id: string, data: UpdateCategoryRequest): Promise<Category> => {
     const categoryRepository = getRepository(Category);
-    const category = await categoryRepository.findOne(id);
+    const category = await categoryRepository.findOneBy({ id });
     if (!category) {
         throw new Error('Category not found');
     }
 
     if (data.name) {
         // Check if another category with the same name exists
-        const existingCategory = await categoryRepository.findOne({ where: { name: data.name } });
+        const existingCategory = await categoryRepository.findOneBy({ name: data.name });
         if (existingCategory && existingCategory.id !== id) {
             throw new Error('Another category with this name already exists');
         }
@@ -53,7 +53,7 @@ export const updateCategory = async (id: string, data: UpdateCategoryRequest): P
 
 export const deleteCategory = async (id: string): Promise<void> => {
     const categoryRepository = getRepository(Category);
-    const category = await categoryRepository.findOne(id);
+    const category = await categoryRepository.findOneBy({ id });
     if (!category) {
         throw new Error('Category not found');
     }
