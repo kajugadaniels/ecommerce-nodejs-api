@@ -1,6 +1,7 @@
 import { createConnection } from 'typeorm';
 import { User } from '../entities/user.entity';
 import dotenv from 'dotenv';
+import { Category } from '../entities/category.entity';
 
 dotenv.config();
 
@@ -11,7 +12,7 @@ export const db = createConnection({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    entities: [User],
+    entities: [User, Category],
     synchronize: true,
     logging: false,
 })
