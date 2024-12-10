@@ -1,12 +1,12 @@
 import { getRepository } from 'typeorm';
-import { Size } from '../entities/size.entity';
 import { CreateSizeRequest, UpdateSizeRequest } from '../types/size.type';
+import { Size } from '../entities/size.entity';
 
 export const createSize = async (data: CreateSizeRequest): Promise<Size> => {
     const sizeRepository = getRepository(Size);
 
     // Check if size with the same name already exists
-    const existingSize = await sizeRepository.findOne({ where: { name: data.name } });
+    const existingSize = await sizeRepository.findOneBy({ name: data.name });
     if (existingSize) {
         throw new Error('Size with this name already exists');
     }
@@ -24,7 +24,7 @@ export const getAllSizes = async (): Promise<Size[]> => {
 
 export const getSizeById = async (id: string): Promise<Size> => {
     const sizeRepository = getRepository(Size);
-    const size = await sizeRepository.findOne(id);
+    const size = await sizeRepository.findOneBy({ id });
     if (!size) {
         throw new Error('Size not found');
     }
@@ -33,14 +33,14 @@ export const getSizeById = async (id: string): Promise<Size> => {
 
 export const updateSize = async (id: string, data: UpdateSizeRequest): Promise<Size> => {
     const sizeRepository = getRepository(Size);
-    const size = await sizeRepository.findOne(id);
+    const size = await sizeRepository.findOneBy({ id });
     if (!size) {
         throw new Error('Size not found');
     }
 
     if (data.name) {
         // Check if another size with the same name exists
-        const existingSize = await sizeRepository.findOne({ where: { name: data.name } });
+        const existingSize = await sizeRepository.findOneBy({ name: data.name });
         if (existingSize && existingSize.id !== id) {
             throw new Error('Another size with this name already exists');
         }
@@ -53,7 +53,7 @@ export const updateSize = async (id: string, data: UpdateSizeRequest): Promise<S
 
 export const deleteSize = async (id: string): Promise<void> => {
     const sizeRepository = getRepository(Size);
-    const size = await sizeRepository.findOne(id);
+    const size = await sizeRepository.findOneBy({ id });
     if (!size) {
         throw new Error('Size not found');
     }
