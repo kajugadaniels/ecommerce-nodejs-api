@@ -5,18 +5,18 @@ import './db/db';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors'; // Import CORS
+import { category_route } from './routes/category.route';
 
 dotenv.config();
 
 const app = express();
 
-// Middleware to parse JSON bodies
 app.use(express.json());
 
 // CORS Middleware
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow your frontend's origin
-  credentials: true, // Allow credentials if needed
+    origin: 'http://localhost:3000',
+    credentials: true,
 }));
 
 // Logging middleware
@@ -25,6 +25,7 @@ app.use(morgan('dev'));
 // Define routes
 app.use("/api/users", user_route);
 app.use("/api/auth", auth_route);
+app.use("/api/categories", category_route); 
 
 // JSON parsing error handler
 const jsonErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
