@@ -3,13 +3,11 @@ import { CreateProductRequest, UpdateProductRequest } from '../types/product.typ
 import { Product } from '../entities/product.entity';
 import { Size } from '../entities/size.entity';
 import { Category } from '../entities/category.entity';
-import { ProductImages } from '../entities/productImages.entity';
 
 export const createProduct = async (data: CreateProductRequest): Promise<Product> => {
     const productRepository = getRepository(Product);
     const sizeRepository = getRepository(Size);
     const categoryRepository = getRepository(Category);
-    const productImagesRepository = getRepository(ProductImages);
 
     // Check if product with the same title already exists
     const existingProduct = await productRepository.findOneBy({ title: data.title });
@@ -39,20 +37,10 @@ export const createProduct = async (data: CreateProductRequest): Promise<Product
         sizes: sizes,
         image: data.image,
         color: data.color,
-        gender: data.gender, // Now of type Gender
+        gender: data.gender,
         description: data.description,
+        productImages: data.productImages || [], // Assign the array or default to empty
     });
-
-    // Handle additional product images
-    if (data.productImages && data.productImages.length > 0) {
-        const productImages = data.productImages.map((img) => {
-            return productImagesRepository.create({
-                image: img,
-                product: product, // Associate with the product
-            });
-        });
-        product.productImages = productImages;
-    }
 
     await productRepository.save(product);
     return product;
@@ -63,7 +51,7 @@ export const getAllProducts = async (page: number = 1, limit: number = 10): Prom
     const products = await productRepository.find({
         skip: (page - 1) * limit,
         take: limit,
-        relations: ['category', 'sizes', 'productImages'],
+        relations: ['category', 'sizes'],
         order: {
             createdOn: 'DESC',
         },
@@ -75,7 +63,7 @@ export const getProductById = async (id: string): Promise<Product> => {
     const productRepository = getRepository(Product);
     const product = await productRepository.findOne({
         where: { id },
-        relations: ['category', 'sizes', 'productImages'],
+        relations: ['category', 'sizes'],
     });
     if (!product) {
         throw new Error('Product not found');
@@ -87,11 +75,10 @@ export const updateProduct = async (id: string, data: UpdateProductRequest): Pro
     const productRepository = getRepository(Product);
     const sizeRepository = getRepository(Size);
     const categoryRepository = getRepository(Category);
-    const productImagesRepository = getRepository(ProductImages);
 
     const product = await productRepository.findOne({
         where: { id },
-        relations: ['sizes', 'productImages'],
+        relations: ['sizes', 'category'],
     });
     if (!product) {
         throw new Error('Product not found');
@@ -106,7 +93,7 @@ export const updateProduct = async (id: string, data: UpdateProductRequest): Pro
         product.title = data.title;
     }
 
-    if (data.price) {
+    if (data.price !== undefined) {
         product.price = data.price;
     }
 
@@ -145,16 +132,7 @@ export const updateProduct = async (id: string, data: UpdateProductRequest): Pro
     }
 
     if (data.productImages) {
-        // Remove existing product images
-        await productImagesRepository.delete({ product: { id: product.id } });
-        // Add new product images
-        const productImages = data.productImages.map((img) => {
-            return productImagesRepository.create({
-                image: img,
-                product: product,
-            });
-        });
-        product.productImages = productImages;
+        product.productImages = data.productImages;
     }
 
     await productRepository.save(product);
