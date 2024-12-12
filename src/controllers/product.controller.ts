@@ -12,19 +12,24 @@ export const createProductController = async (req: Request, res: Response): Prom
     try {
         const product = await createProduct(req.body);
         res.status(201).json(product);
+        // Optional: logger.info('Product created successfully', { product });
     } catch (e: any) {
         console.error('Create Product Error:', e.message);
         res.status(400).json({ message: e.message });
+        // Optional: logger.error('Create Product Error:', e.message);
     }
 };
 
 export const getAllProductsController = async (req: Request, res: Response): Promise<void> => {
     try {
-        const products = await getAllProducts();
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const products = await getAllProducts(page, limit);
         res.json(products);
     } catch (e: any) {
         console.error('Get All Products Error:', e.message);
         res.status(500).json({ message: e.message });
+        // Optional: logger.error('Get All Products Error:', e.message);
     }
 };
 
@@ -41,6 +46,7 @@ export const getProductByIdController = async (req: Request, res: Response): Pro
     } catch (e: any) {
         console.error('Get Product By ID Error:', e.message);
         res.status(404).json({ message: e.message });
+        // Optional: logger.error('Get Product By ID Error:', e.message);
     }
 };
 
@@ -57,6 +63,7 @@ export const updateProductController = async (req: Request, res: Response): Prom
     } catch (e: any) {
         console.error('Update Product Error:', e.message);
         res.status(400).json({ message: e.message });
+        // Optional: logger.error('Update Product Error:', e.message);
     }
 };
 
@@ -73,5 +80,6 @@ export const deleteProductController = async (req: Request, res: Response): Prom
     } catch (e: any) {
         console.error('Delete Product Error:', e.message);
         res.status(404).json({ message: e.message });
+        // Optional: logger.error('Delete Product Error:', e.message);
     }
 };
