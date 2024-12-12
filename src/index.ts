@@ -32,9 +32,9 @@ app.use(morgan('dev'));
 // Define routes
 app.use("/api/users", user_route);
 app.use("/api/auth", auth_route);
-app.use("/api/categories", category_route);
-app.use("/api/sizes", size_route);
-app.use("/api/products", product_route);
+app.use("/api", category_route);
+app.use("/api", size_route);
+app.use("/api", product_route);
 
 // JSON parsing error handler
 const jsonErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
