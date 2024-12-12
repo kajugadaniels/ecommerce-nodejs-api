@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 import { CreateProductRequest, UpdateProductRequest } from '../types/product.type';
 import { Product } from '../entities/product.entity';
 import { Size } from '../entities/size.entity';
@@ -24,7 +24,9 @@ export const createProduct = async (data: CreateProductRequest): Promise<Product
     }
 
     // Fetch sizes
-    const sizes = await sizeRepository.findByIds(data.sizeIds);
+    const sizes = await sizeRepository.find({
+        where: { id: In(data.sizeIds) },
+    });
     if (sizes.length !== data.sizeIds.length) {
         throw new Error('One or more Sizes not found');
     }
@@ -46,7 +48,7 @@ export const createProduct = async (data: CreateProductRequest): Promise<Product
         const productImages = data.productImages.map((img) => {
             return productImagesRepository.create({
                 image: img,
-                product: product,
+                product: product, // Associate with the product
             });
         });
         product.productImages = productImages;
@@ -56,10 +58,15 @@ export const createProduct = async (data: CreateProductRequest): Promise<Product
     return product;
 };
 
-export const getAllProducts = async (): Promise<Product[]> => {
+export const getAllProducts = async (page: number = 1, limit: number = 10): Promise<Product[]> => {
     const productRepository = getRepository(Product);
     const products = await productRepository.find({
+        skip: (page - 1) * limit,
+        take: limit,
         relations: ['category', 'sizes', 'productImages'],
+        order: {
+            createdOn: 'DESC',
+        },
     });
     return products;
 };
@@ -112,7 +119,9 @@ export const updateProduct = async (id: string, data: UpdateProductRequest): Pro
     }
 
     if (data.sizeIds) {
-        const sizes = await sizeRepository.findByIds(data.sizeIds);
+        const sizes = await sizeRepository.find({
+            where: { id: In(data.sizeIds) },
+        });
         if (sizes.length !== data.sizeIds.length) {
             throw new Error('One or more Sizes not found');
         }
