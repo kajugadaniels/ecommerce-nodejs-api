@@ -3,6 +3,7 @@ import { user_route } from './routes/user.route';
 import { auth_route } from './routes/auth.route';
 import { category_route } from './routes/category.route';
 import { size_route } from './routes/size.route';
+import { product_route } from './routes/product.route'
 import './db/db';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
@@ -33,6 +34,7 @@ app.use("/api/users", user_route);
 app.use("/api/auth", auth_route);
 app.use("/api/categories", category_route);
 app.use("/api/sizes", size_route);
+app.use("/api/products", product_route);
 
 // JSON parsing error handler
 const jsonErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
