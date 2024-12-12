@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import { Category } from '../entities/category.entity';
 import { Product } from '../entities/product.entity';
 import { Size } from '../entities/size.entity';
-import { ProductImages } from '../entities/productImages.entity';
 
 dotenv.config();
 
@@ -15,7 +14,7 @@ export const db = createConnection({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    entities: [User, Category, Size, Product, ProductImages],
+    entities: [User, Category, Size, Product],
     synchronize: true,
     logging: false,
 })
