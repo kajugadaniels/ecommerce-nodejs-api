@@ -1,4 +1,5 @@
 import { body, param } from 'express-validator';
+import { Gender } from '../entities/product.entity';
 
 export const createProductValidation = [
     body('title')
@@ -22,7 +23,7 @@ export const createProductValidation = [
         .isLength({ max: 50 }).withMessage('Color must not exceed 50 characters'),
     body('gender')
         .notEmpty().withMessage('Gender is required')
-        .isIn(['Male', 'Female', 'Both']).withMessage('Gender must be Male, Female, or Both'),
+        .isIn(Object.values(Gender)).withMessage('Gender must be Male, Female, or Both'),
     body('description')
         .notEmpty().withMessage('Description is required'),
     body('productImages')
@@ -60,7 +61,7 @@ export const updateProductValidation = [
         .isLength({ max: 50 }).withMessage('Color must not exceed 50 characters'),
     body('gender')
         .optional()
-        .isIn(['Male', 'Female', 'Both']).withMessage('Gender must be Male, Female, or Both'),
+        .isIn(Object.values(Gender)).withMessage('Gender must be Male, Female, or Both'),
     body('description')
         .optional()
         .notEmpty().withMessage('Description cannot be empty'),
