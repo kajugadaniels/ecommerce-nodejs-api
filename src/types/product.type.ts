@@ -1,3 +1,5 @@
+import { Gender } from '../entities/product.entity';
+
 export interface CreateProductRequest {
     title: string;
     price: number;
@@ -5,7 +7,7 @@ export interface CreateProductRequest {
     sizeIds: string[];
     image: string;
     color: string;
-    gender: 'Male' | 'Female' | 'Both';
+    gender: Gender;
     description: string;
     productImages?: string[];
 }
@@ -17,7 +19,7 @@ export interface UpdateProductRequest {
     sizeIds?: string[];
     image?: string;
     color?: string;
-    gender?: 'Male' | 'Female' | 'Both';
+    gender?: Gender;
     description?: string;
     productImages?: string[];
 }
