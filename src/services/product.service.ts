@@ -37,7 +37,7 @@ export const createProduct = async (data: CreateProductRequest): Promise<Product
         sizes: sizes,
         image: data.image,
         color: data.color,
-        gender: data.gender,
+        gender: data.gender, // Now of type Gender
         description: data.description,
     });
 
