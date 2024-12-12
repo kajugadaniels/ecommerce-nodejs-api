@@ -5,13 +5,11 @@ import {
     ManyToOne,
     ManyToMany,
     JoinTable,
-    OneToMany,
     CreateDateColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { Category } from './category.entity';
 import { Size } from './size.entity';
-import { ProductImages } from './productImages.entity';
 
 export enum Gender {
     MALE = 'Male',
@@ -57,8 +55,8 @@ export class Product {
     @Column('text')
     description!: string;
 
-    @OneToMany(() => ProductImages, (productImage) => productImage.product, { cascade: true, eager: true })
-    productImages!: ProductImages[];
+    @Column('json', { nullable: true })
+    productImages!: string[];
 
     @CreateDateColumn()
     createdOn!: Date;
